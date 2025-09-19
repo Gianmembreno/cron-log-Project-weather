@@ -1,0 +1,49 @@
+name: Weather Data Logger
+
+on:
+  schedule:
+    # Run every hour at minute 0
+    - cron: '0 * * * *'
+    
+    # Other schedule examples (uncomment one):
+    # - cron: '*/30 * * * *'  # Every 30 minutes
+    # - cron: '0 */6 * * *'   # Every 6 hours
+    # - cron: '0 9,17 * * *'  # At 9 AM and 5 PM daily
+    
+  # Allow manual trigger for testing
+  workflow_dispatch:
+
+jobs:
+  log-weather:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v3
+      with:
+        # This allows the workflow to push changes back
+        persist-credentials: true
+        fetch-depth: 0
+    
+    - name: Setup Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '18'
+    
+    - name: Install dependencies
+      run: npm install
+    
+    - name: Run weather logger
+      env:
+        OPENWEATHER_API_KEY: ${{ secrets.OPENWEATHER_API_KEY }}
+        CITY: ${{ vars.CITY || 'London' }}
+        UNITS: ${{ vars.UNITS || 'metric' }}
+      run: npm start
+    
+    - name: Commit and push logs
+      run: |
+        git config --local user.email "action@github.com"
+        git config --local user.name "GitHub Action"
+        git add data/*.json
+        git diff --staged --quiet || git commit -m "📊 Update weather logs - $(date '+%Y-%m-%d %H:%M:%S')"
+        git push

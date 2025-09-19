@@ -1,0 +1,7 @@
+# Create .gitignore at root
+node_modules/
+.env
+data/*.json
+!data/README.md
+.DS_Store
+*.log

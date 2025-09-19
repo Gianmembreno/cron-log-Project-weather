@@ -1,0 +1,17 @@
+{
+  "name": "weather-data-logger",
+  "version": "1.0.0",
+  "description": "Automated weather data logger using OpenWeatherMap API",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "test": "echo \"Weather logger executed at $(date)\""
+  },
+  "keywords": ["weather", "cron", "logger", "openweathermap"],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "dotenv": "^16.0.3",
+    "node-fetch": "^2.6.7"
+  }
+}
